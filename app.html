@@ -17,7 +17,7 @@ button,select,input{font:inherit;color:var(--tx);background:var(--sf);border:1px
 </style></head><body><div id="app"></div>
 <script>
 // ===== CONFIGURACIÓN =====
-const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcGd0Ynl5enFqd2NueGV1ZWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMTI0NDMsImV4cCI6MjEwNjc4ODQ0M30.OPHfrZ2bR2RKuy9nVh9sGcl_XZyoD3NV8ncp1gnzdPE',ENC='https://cesarisola-png.github.io/ef/encuesta.html';
+const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='PEGAR_CLAVE_PUBLICA',ENC='https://cesarisola-png.github.io/ef/encuesta.html';
 // =========================
 const $=s=>document.querySelector(s),av=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,fd=t=>new Date(t).toLocaleDateString('es-AR'),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 window.onerror=m=>{$('#app').innerHTML='<p class="err">Error: '+esc(m)+'</p>'};
@@ -40,7 +40,7 @@ async function go(v,o={}){S={v,...o};const A=$('#app');if(v!='login'&&!TK){v='lo
 const bd=(l,i)=>`<span class="bd" style="background:${CL[i]}">${l[i]}</span>`,V={};
 V.login=()=>`<h1>Matriz Familia–Empresa</h1><div class="c"><div class="row"><input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Contraseña" onkeydown="if(event.key=='Enter')login()"><button class="pr" onclick="login()">Ingresar</button></div><div id="er" class="err"></div></div>`;
 V.home=async()=>{const L=await api('ef_familias?select=id,nombre,generacion,sector,ef_relevamientos(fecha,resultado)&order=created_at.desc');
- return `<div class="row"><h1 style="flex:1">Familias</h1><button onclick="logout()">Salir</button></div>`+L.map(f=>{const r=f.ef_relevamientos.filter(x=>x.resultado).sort((a,b)=>a.fecha<b.fecha?1:-1)[0];return `<div class="c fam" onclick="go('fam',{f:'${f.id}'})"><div class="row"><b style="flex:1">${esc(f.nombre)}</b>${r?bd(FL,r.resultado.lf)+bd(EL,r.resultado.le):'<span class="mu" style="flex:0">sin diagnóstico</span>'}</div><div class="mu">${esc([f.generacion&&f.generacion+' gen.',f.sector].filter(Boolean).join(' · '))}</div></div>`}).join('')||'<p class="mu">Todavía no hay familias.</p>'
+ return `<div class="row"><h1 style="flex:1">Familias</h1><button onclick="logout()">Salir</button></div>`+(L.map(f=>{const r=f.ef_relevamientos.filter(x=>x.resultado).sort((a,b)=>a.fecha<b.fecha?1:-1)[0];return `<div class="c fam" onclick="go('fam',{f:'${f.id}'})"><div class="row"><b style="flex:1">${esc(f.nombre)}</b>${r?bd(FL,r.resultado.lf)+bd(EL,r.resultado.le):'<span class="mu" style="flex:0">sin diagnóstico</span>'}</div><div class="mu">${esc([f.generacion&&f.generacion+' gen.',f.sector].filter(Boolean).join(' · '))}</div></div>`}).join('')||'<p class="mu">Todavía no hay familias.</p>')
  +`<details class="c"><summary><b>+ Nueva familia</b></summary><div class="row"><input id="nn" placeholder="Nombre"><select id="ng"><option>2da</option><option>3ra</option></select><input id="ns" placeholder="Sector"><input id="nu" placeholder="Ubicación"><button class="pr" onclick="nf()">Crear</button></div></details>`};
 async function nf(){const n=$('#nn').value.trim();if(!n)return;await api('ef_familias',{method:'POST',body:JSON.stringify({nombre:n,generacion:$('#ng').value,sector:$('#ns').value,ubicacion:$('#nu').value})});go('home')}
 V.fam=async()=>{const [f]=await api(`ef_familias?id=eq.${S.f}&select=*`),R=await api(`ef_relevamientos?familia_id=eq.${S.f}&select=id,fecha,estado,resultado&order=fecha.desc`);
