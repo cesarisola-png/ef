@@ -1,0 +1,58 @@
+<!doctype html><html lang="es-AR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Cuestionario</title>
+<style>
+:root{--bg:#faf8f5;--sf:#fff;--tx:#1f2328;--mu:#6b7280;--bd:#e3ded6;--ac:#2f5d50;--r:#c0392b}
+@media(prefers-color-scheme:dark){:root{--bg:#16191a;--sf:#1f2425;--tx:#ece8e1;--mu:#9aa3a6;--bd:#363d3f;--ac:#4f9a82}}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:8px 0}h2{font-size:19px;margin:10px 0 4px}.mu{color:var(--mu);font-size:14px}
+.c{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px;margin:14px 0}
+.q{padding:14px 0;border-top:1px solid var(--bd)}.q:first-of-type{border-top:0}.q p{margin:0 0 10px}
+.lk{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.lk button{padding:12px 0;font-size:17px}
+.ex{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-top:4px}
+button{font:inherit;color:var(--tx);background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:10px 16px;cursor:pointer}
+button.on,button.pr{background:var(--ac);border-color:var(--ac);color:#fff}button.pr{width:100%;padding:14px;font-weight:600;margin-top:12px}button:disabled{opacity:.4}
+.bar{height:6px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+.err{color:var(--r);margin-top:10px}label.ck{display:flex;gap:10px;align-items:flex-start;margin-top:12px}label.ck input{margin-top:5px;width:18px;height:18px}
+</style></head><body><div id="app"><p class="mu">Cargando…</p></div>
+<script>
+// ===== CONFIGURACIÓN: pegar la URL y la clave PÚBLICA (anon / publishable) del proyecto Supabase =====
+const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcGd0Ynl5enFqd2NueGV1ZWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMTI0NDMsImV4cCI6MjEwNjc4ODQ0M30.OPHfrZ2bR2RKuy9nVh9sGcl_XZyoD3NV8ncp1gnzdPE';
+// =====================================================================================================
+const $=s=>document.querySelector(s),T=new URLSearchParams(location.search).get('t');
+window.onerror=m=>{$('#app').innerHTML='<p class="err">Error en la página: '+m+'</p>'};
+const Q={fam:[
+{k:'com',n:'Comunicación y resolución de conflictos',q:['¿Con qué frecuencia podés expresar tus ideas o preocupaciones en reuniones familiares sin sentirte juzgado?','¿Con qué frecuencia las decisiones familiares que afectan a la empresa se toman después de escuchar a todos?','¿Con qué frecuencia los conflictos se resuelven de forma directa, sin "guardarse" o generar bandos?','¿Con qué frecuencia las cuestiones empresariales interfieren negativamente en las relaciones familiares?','¿Con qué frecuencia podés recurrir a algún miembro de la familia cuando algo te preocupa?']},
+{k:'con',n:'Confianza y equidad',q:['¿Con qué frecuencia tus aportes a la empresa son reconocidos y valorados por la familia?','¿Con qué frecuencia las responsabilidades y beneficios se distribuyen de forma justa?','¿Con qué frecuencia confiás en que los demás van a cumplir lo que prometen?','¿Con qué frecuencia las decisiones importantes se toman de forma transparente?','¿Con qué frecuencia tu opinión tiene el mismo peso que la de otros, más allá del parentesco?']},
+{k:'pro',n:'Propósito y conexión',q:['¿Con qué frecuencia la familia comparte tiempo juntos más allá del trabajo?','¿Con qué frecuencia sentís que la familia tiene una visión compartida sobre el futuro?','¿Con qué frecuencia estás satisfecho con el equilibrio familia-empresa?','¿Con qué frecuencia la familia conversa sobre los valores que guían la empresa?','¿Con qué frecuencia sentís orgullo de formar parte de esta empresa familiar?']},
+{k:'gen',n:'Preparación de la nueva generación',q:['¿Se ha conversado en familia sobre qué pasará con la empresa cuando el líder actual no esté?','¿Existen criterios claros para que un familiar se incorpore a la empresa?','¿Los nuevos están recibiendo formación o mentoría para asumir responsabilidades?','¿La familia está de acuerdo en que la sucesión debe planificarse con anticipación?','¿Se ha evaluado quién podría ser el próximo líder?']},
+{k:'reg',n:'Reglas y acuerdos familiares',q:['¿Existen acuerdos escritos o reglas claras sobre decisiones que afectan a la empresa?','¿Se realizan reuniones familiares periódicas para tratar temas de la empresa?','¿Está claro quiénes pueden trabajar en la empresa y en qué condiciones?','¿Existe algún mecanismo para resolver conflictos cuando no hay consenso?','¿La familia estaría dispuesta a crear un protocolo familiar?']}],
+emp:[
+{k:'fin',n:'Situación financiera',q:['¿La empresa maneja un presupuesto anual o plan de caja proyectado?','¿Se conocen con claridad los márgenes por producto o línea?','¿La empresa tiene acceso a crédito o financiamiento cuando lo necesita?','¿El nivel de deuda actual es manejable en relación con los ingresos?','¿Se realizan controles periódicos de resultados vs. lo planificado?']},
+{k:'gob',n:'Gobierno y dirección',q:['¿Existe un directorio o consejo que se reúna periódicamente?','¿Los roles y responsabilidades de cada familiar están claramente delimitados?','¿Las decisiones importantes se toman en reuniones con actas o registro?','¿Hay personas no familiares con voz en las decisiones clave?','¿Se evalúa periódicamente el desempeño del máximo responsable?']},
+{k:'suc',n:'Sucesión y continuidad',q:['¿Existe un plan de sucesión formalizado para el CEO o líder actual?','¿La familia ha definido un horizonte temporal para la transición?','¿La empresa depende críticamente de una sola persona para funcionar?','¿Los posibles sucesores están siendo evaluados y preparados?','¿Existe un plan de contingencia si el líder no puede ejercer repentinamente?']},
+{k:'tal',n:'Talento y dependencia del fundador',q:['¿La empresa tiene dificultades para retener empleados clave no familiares?','¿El líder actual tiende a centralizar decisiones en lugar de delegar?','¿Existen procesos documentados para tareas clave?','¿La empresa invierte en capacitación para sus empleados?','¿La empresa podría funcionar un mes sin la presencia del líder?']},
+{k:'mer',n:'Posición competitiva y mercado',q:['¿La empresa tiene claridad sobre sus principales ventajas competitivas?','¿La facturación de los últimos 12 meses fue mayor que la del período anterior?','¿La cartera de clientes está diversificada (no depende de 1 o 2)?','¿Se analiza regularmente el entorno competitivo?','¿La empresa cuenta con un plan estratégico escrito a 2-3 años?']}]};
+const LB={fam:['1 = Nunca / No','5 = Siempre / Sí'],emp:['1 = Nada / No','5 = Totalmente / Sí']};
+const qid=(e,d,i)=>e+'_'+d.k+'_0'+(i+1);
+const ERR={timeout:'El servidor no respondió en 15 s. Revisá SB_URL y SB_KEY y tu conexión.',sin_token:'Falta el token en el enlace. Tiene que terminar en encuesta.html?t=encuesta.html?t=5e4d24ec-b856-4fda-927a-080a3e63346d',sin_clave:'Falta configurar SB_KEY (clave pública) dentro de encuesta.html.',enlace_invalido:'Este enlace no es válido, venció o ya fue completado. Pedile uno nuevo a tu consultor.',faltan_respuestas:'Faltan respuestas por completar.'};
+const msg=e=>{const m=ERR[e.message]||('No se pudo completar la operación. Detalle: '+e.message);const x=$('#er');if(x)x.textContent=m;else $('#app').innerHTML=`<p class="err">${m}</p>`};
+async function rpc(fn,body){const h={'Content-Type':'application/json',apikey:SB_KEY};if(SB_KEY.startsWith('eyJ'))h.Authorization='Bearer '+SB_KEY;
+ const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),15000);let r;try{r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(body),signal:ac.signal})}catch(x){throw new Error(x.name=='AbortError'?'timeout':'sin conexión: '+x.message)}finally{clearTimeout(tm)}const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.message||('HTTP '+r.status));return j}
+let S={e:null,a:{},i:-1};
+async function init(){if(SB_KEY=='PEGAR_CLAVE_PUBLICA'){msg({message:'sin_clave'});return}if(!T){msg({message:'sin_token'});return}
+ try{const j=await rpc('rpc_ef_encuesta_abrir',{p_token:T});S.e=j.eje;S.a=j.respuestas||{};
+  if(j.consentimiento){const f=Q[S.e].findIndex((d,_)=>d.q.some((_,i)=>!S.a[qid(S.e,d,i)]));S.i=f<0?4:f}render()}catch(e){msg(e)}}
+function render(){const A=$('#app'),t=S.e=='fam'?'Cuestionario familiar':'Cuestionario de la empresa';
+ if(S.i==-1){A.innerHTML=`<h1>${t}</h1><p class="mu">Son 5 bloques de 5 preguntas, unos 10 minutos. No hay respuestas correctas: contestá lo que realmente percibís.</p>
+ <div class="c"><b>Antes de empezar</b><p class="mu">Participar es voluntario. Tus respuestas individuales solo las puede ver el consultor que coordina el trabajo; el informe presenta resultados agrupados. Los datos se tratan conforme a la Ley 25.326 de Protección de Datos Personales, y podés pedirle al consultor acceso, rectificación o supresión.</p>
+ <label class="ck"><input type="checkbox" id="ok" onchange="$('#go').disabled=!this.checked"><span>Entiendo y acepto participar.</span></label></div><button class="pr" id="go" disabled onclick="consent()">Comenzar</button><div id="er" class="err"></div>`;return}
+ if(S.i>4){A.innerHTML='<h1>¡Gracias!</h1><p>Tus respuestas fueron enviadas. Ya podés cerrar esta página.</p>';return}
+ const d=Q[S.e][S.i],ids=d.q.map((_,j)=>qid(S.e,d,j)),full=ids.every(x=>S.a[x]);
+ A.innerHTML=`<div class="bar"><i style="width:${S.i/5*100}%"></i></div><p class="mu">Bloque ${S.i+1} de 5</p><h2>${d.n}</h2><div class="c">${d.q.map((x,j)=>`<div class="q"><p>${x}</p><div class="lk">${[1,2,3,4,5].map(v=>`<button class="${S.a[ids[j]]==v?'on':''}" onclick="pick('${ids[j]}',${v})">${v}</button>`).join('')}</div><div class="ex"><span>${LB[S.e][0]}</span><span>${LB[S.e][1]}</span></div></div>`).join('')}</div>
+ <button class="pr" id="nx" ${full?'':'disabled'} onclick="next()">${S.i==4?'Enviar':'Siguiente'}</button><div id="er" class="err"></div>`}
+async function consent(){$('#go').disabled=true;try{await rpc('rpc_ef_encuesta_guardar',{p_token:T,p_respuestas:{},p_consent:true,p_final:false});S.i=0;render()}catch(e){msg(e);$('#go').disabled=false}}
+function pick(id,v){S.a[id]=v;const y=scrollY;render();scrollTo(0,y)}
+async function next(){const d=Q[S.e][S.i],o={};d.q.forEach((_,j)=>{const id=qid(S.e,d,j);o[id]=S.a[id]});$('#nx').disabled=true;
+ try{await rpc('rpc_ef_encuesta_guardar',{p_token:T,p_respuestas:o,p_consent:true,p_final:S.i==4});S.i++;render();scrollTo(0,0)}catch(e){msg(e);$('#nx').disabled=false}}
+init();
+</script></body></html>
