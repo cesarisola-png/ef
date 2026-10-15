@@ -17,7 +17,7 @@ button,select,input{font:inherit;color:var(--tx);background:var(--sf);border:1px
 </style></head><body><div id="app"></div>
 <script>
 // ===== CONFIGURACIÓN =====
-const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='PEGAR_CLAVE_PUBLICA',ENC='https://cesarisola-png.github.io/ef/encuesta.html';
+const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcGd0Ynl5enFqd2NueGV1ZWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMTI0NDMsImV4cCI6MjEwNjc4ODQ0M30.OPHfrZ2bR2RKuy9nVh9sGcl_XZyoD3NV8ncp1gnzdPE',ENC='https://cesarisola-png.github.io/ef/encuesta.html';
 // =========================
 const $=s=>document.querySelector(s),av=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,fd=t=>new Date(t).toLocaleDateString('es-AR'),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 window.onerror=m=>{$('#app').innerHTML='<p class="err">Error: '+esc(m)+'</p>'};
