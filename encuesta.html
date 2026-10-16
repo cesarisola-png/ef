@@ -16,7 +16,7 @@ button.on,button.pr{background:var(--ac);border-color:var(--ac);color:#fff}butto
 </style></head><body><div id="app"><p class="mu">Cargando…</p></div>
 <script>
 // ===== CONFIGURACIÓN: pegar la URL y la clave PÚBLICA (anon / publishable) del proyecto Supabase =====
-const SB_URL='https://mcpgtbyyzqjwcnxeuekh.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jcGd0Ynl5enFqd2NueGV1ZWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMTI0NDMsImV4cCI6MjEwNjc4ODQ0M30.OPHfrZ2bR2RKuy9nVh9sGcl_XZyoD3NV8ncp1gnzdPE';
+const SB_URL='https://cpjxdzeektqxccnrxfbc.supabase.co',SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwanhkemVla3RxeGNjbnJ4ZmJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNjIzOTUsImV4cCI6MjEwNzczODM5NX0.f9u_FXJtNxk9EudMaLMoMFNToZ4IO6Tbxtp0BvEmjlg';
 // =====================================================================================================
 const $=s=>document.querySelector(s),T=new URLSearchParams(location.search).get('t');
 window.onerror=m=>{$('#app').innerHTML='<p class="err">Error en la página: '+m+'</p>'};
@@ -34,12 +34,12 @@ emp:[
 {k:'mer',n:'Posición competitiva y mercado',q:['¿La empresa tiene claridad sobre sus principales ventajas competitivas?','¿La facturación de los últimos 12 meses fue mayor que la del período anterior?','¿La cartera de clientes está diversificada (no depende de 1 o 2)?','¿Se analiza regularmente el entorno competitivo?','¿La empresa cuenta con un plan estratégico escrito a 2-3 años?']}]};
 const LB={fam:['1 = Nunca / No','5 = Siempre / Sí'],emp:['1 = Nada / No','5 = Totalmente / Sí']};
 const qid=(e,d,i)=>e+'_'+d.k+'_0'+(i+1);
-const ERR={timeout:'El servidor no respondió en 15 s. Revisá SB_URL y SB_KEY y tu conexión.',sin_token:'Falta el token en el enlace. Tiene que terminar en encuesta.html?t=encuesta.html?t=5e4d24ec-b856-4fda-927a-080a3e63346d',sin_clave:'Falta configurar SB_KEY (clave pública) dentro de encuesta.html.',enlace_invalido:'Este enlace no es válido, venció o ya fue completado. Pedile uno nuevo a tu consultor.',faltan_respuestas:'Faltan respuestas por completar.'};
+const ERR={timeout:'El servidor no respondió en 15 s. Revisá SB_URL y SB_KEY y tu conexión.',sin_token:'Falta el token en el enlace. Pedile a tu consultor el enlace completo (termina en encuesta.html?t=…).',sin_clave:'Falta configurar SB_KEY (clave pública) dentro de encuesta.html.',enlace_invalido:'Este enlace no es válido, venció o ya fue completado. Pedile uno nuevo a tu consultor.',faltan_respuestas:'Faltan respuestas por completar.'};
 const msg=e=>{const m=ERR[e.message]||('No se pudo completar la operación. Detalle: '+e.message);const x=$('#er');if(x)x.textContent=m;else $('#app').innerHTML=`<p class="err">${m}</p>`};
 async function rpc(fn,body){const h={'Content-Type':'application/json',apikey:SB_KEY};if(SB_KEY.startsWith('eyJ'))h.Authorization='Bearer '+SB_KEY;
  const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),15000);let r;try{r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:h,body:JSON.stringify(body),signal:ac.signal})}catch(x){throw new Error(x.name=='AbortError'?'timeout':'sin conexión: '+x.message)}finally{clearTimeout(tm)}const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.message||('HTTP '+r.status));return j}
 let S={e:null,a:{},i:-1};
-async function init(){if(SB_KEY=='PEGAR_CLAVE_PUBLICA'){msg({message:'sin_clave'});return}if(!T){msg({message:'sin_token'});return}
+async function init(){if(SB_KEY=='PEGAR_CLAVE_PUBLICA'||SB_URL=='PEGAR_URL_PROYECTO'){msg({message:'sin_clave'});return}if(!T){msg({message:'sin_token'});return}
  try{const j=await rpc('rpc_ef_encuesta_abrir',{p_token:T});S.e=j.eje;S.a=j.respuestas||{};
   if(j.consentimiento){const f=Q[S.e].findIndex((d,_)=>d.q.some((_,i)=>!S.a[qid(S.e,d,i)]));S.i=f<0?4:f}render()}catch(e){msg(e)}}
 function render(){const A=$('#app'),t=S.e=='fam'?'Cuestionario familiar':'Cuestionario de la empresa';
